@@ -1,4 +1,4 @@
-import { Card, CardBody, Heading, Image, Stack } from '@chakra-ui/react';
+import { Card, CardBody, Heading, Image } from '@chakra-ui/react';
 
 import { TrafficCamera } from '../../types/traffic';
 
@@ -9,10 +9,10 @@ interface TrafficImageProps {
 const TrafficImage = ({ selectedCamera }: TrafficImageProps) => (
   <Card>
     <CardBody>
+      <Heading size="md" mb="2">
+        {selectedCamera.name}
+      </Heading>
       <Image src={selectedCamera.image} alt={selectedCamera.name} />
-      <Stack mt="6" spacing="3">
-        <Heading size="md">{selectedCamera.name}</Heading>
-      </Stack>
     </CardBody>
   </Card>
 );

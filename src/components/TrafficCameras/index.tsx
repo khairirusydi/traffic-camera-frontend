@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Box, Card, CardBody, Heading, Input, Stack, Text, useToast } from '@chakra-ui/react';
+import { Card, CardBody, Grid, GridItem, Heading, Input, Text, useToast } from '@chakra-ui/react';
 
 import { useGetTrafficCameras } from '../../services/traffic';
 import { formatDateTimeForApi } from '../../utils.ts/dateUtil';
@@ -42,34 +42,47 @@ const TrafficCameras = () => {
   };
 
   return (
-    <Box py="4">
-      <Card mb="4">
-        <CardBody>
-          <Stack spacing="3">
+    <Grid py="4" gap="4" templateColumns="repeat(3, 1fr)">
+      <GridItem colSpan={{ base: 3, md: 2 }}>
+        <Card>
+          <CardBody gap="1">
+            <Heading size="md" mb="2">
+              Date and Time
+            </Heading>
             <Input
               placeholder="Select Date and Time"
               size="md"
               type="datetime-local"
               onChange={(e) => onSelectDatetimeHandler(e.target.value)}
             />
-            <TrafficCameraSelect
-              isFetchingCameras={isFetchingCameras}
-              trafficCamerasList={trafficCamerasList}
-              onSelect={onSelectCameraHandler}
-            />
-          </Stack>
-        </CardBody>
-      </Card>
-      {selectedCamera && (
-        <Card mb="4">
-          <CardBody>
-            <Heading size="md">Weather Forecast</Heading>
-            <Text>{selectedCamera.forecast}</Text>
           </CardBody>
         </Card>
+      </GridItem>
+      <GridItem colSpan={{ base: 3, md: 2 }}>
+        <TrafficCameraSelect
+          isFetchingCameras={isFetchingCameras}
+          trafficCamerasList={trafficCamerasList}
+          onSelect={onSelectCameraHandler}
+        />
+      </GridItem>
+      {selectedCamera && (
+        <GridItem colSpan={{ base: 3, md: 1 }}>
+          <Card>
+            <CardBody>
+              <Heading size="md" mb="2">
+                Weather Forecast
+              </Heading>
+              <Text>{selectedCamera.forecast}</Text>
+            </CardBody>
+          </Card>
+        </GridItem>
       )}
-      {selectedCamera && <TrafficImage selectedCamera={selectedCamera} />}
-    </Box>
+      {selectedCamera && (
+        <GridItem colSpan={{ base: 3, md: 2 }}>
+          <TrafficImage selectedCamera={selectedCamera} />
+        </GridItem>
+      )}
+    </Grid>
   );
 };
 
