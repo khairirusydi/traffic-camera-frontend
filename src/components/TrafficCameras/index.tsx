@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Box, Select, Skeleton, useToast } from '@chakra-ui/react';
+import { Box, useToast } from '@chakra-ui/react';
 
 import { useGetTrafficCameras } from '../../services/traffic';
+import TrafficCameraSelect from './TrafficCameraSelect';
 import TrafficImage from './TrafficImage';
 
 const TrafficCameras = () => {
@@ -28,17 +29,17 @@ const TrafficCameras = () => {
 
   if (isError) return null;
 
+  const onSelectHandler = (id: string) => {
+    setSelectedCameraId(id);
+  };
+
   return (
     <Box py="4">
-      <Skeleton isLoaded={!isFetchingCameras} my="4">
-        <Select placeholder="Select traffic camera" onChange={(e) => setSelectedCameraId(e.target.value)}>
-          {trafficCamerasList?.map((c) => (
-            <option key={c.cameraId} value={c.cameraId}>
-              {c.name}
-            </option>
-          ))}
-        </Select>
-      </Skeleton>
+      <TrafficCameraSelect
+        isFetchingCameras={isFetchingCameras}
+        trafficCamerasList={trafficCamerasList}
+        onSelect={onSelectHandler}
+      />
       {selectedCamera && <TrafficImage selectedCamera={selectedCamera} />}
     </Box>
   );
