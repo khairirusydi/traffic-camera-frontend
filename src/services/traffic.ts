@@ -12,7 +12,7 @@ const getTrafficCameras = async (selectedDate?: string): Promise<TrafficCamera[]
     params: { selectedDate },
   });
 
-  return data?.cameras;
+  return data?.cameras.sort((a, b) => a.name.localeCompare(b.name));
 };
 
 export const useGetTrafficCameras = (selectedDate?: string) => {
