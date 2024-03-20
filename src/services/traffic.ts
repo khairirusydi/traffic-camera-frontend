@@ -17,7 +17,7 @@ const getTrafficCameras = async (selectedDate?: string): Promise<TrafficCamera[]
 
 export const useGetTrafficCameras = (selectedDate?: string) => {
   const query = useQuery({
-    queryKey: [TrafficEndpoints.GET_TRAFFIC_IMAGES],
+    queryKey: [TrafficEndpoints.GET_TRAFFIC_IMAGES, selectedDate],
     queryFn: () => getTrafficCameras(selectedDate),
   });
 

@@ -1,15 +1,17 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Box, useToast } from '@chakra-ui/react';
+import { Box, Input, useToast } from '@chakra-ui/react';
 
 import { useGetTrafficCameras } from '../../services/traffic';
 import TrafficCameraSelect from './TrafficCameraSelect';
 import TrafficImage from './TrafficImage';
+import { formatDateTimeForApi } from '../../utils.ts/dateUtil';
 
 const TrafficCameras = () => {
-  const toast = useToast();
-  const { data: trafficCamerasList, isError, isLoading: isFetchingCameras } = useGetTrafficCameras();
-
+  const [selectedDateTime, setSelectedDateTime] = useState<string | undefined>();
   const [selectedCameraId, setSelectedCameraId] = useState<string>('');
+
+  const toast = useToast();
+  const { data: trafficCamerasList, isError, isLoading: isFetchingCameras } = useGetTrafficCameras(selectedDateTime);
 
   const selectedCamera = useMemo(() => {
     if (!selectedCameraId) return undefined;
@@ -29,16 +31,23 @@ const TrafficCameras = () => {
 
   if (isError) return null;
 
-  const onSelectHandler = (id: string) => {
+  const onSelectCameraHandler = (id: string) => {
     setSelectedCameraId(id);
+  };
+
+  const onSelectDatetimeHandler = (datetime: string) => {
+    const formattedDateTime = datetime ? formatDateTimeForApi(datetime) : undefined;
+
+    setSelectedDateTime(formattedDateTime);
   };
 
   return (
     <Box py="4">
+      <Input placeholder="Select Date and Time" size="md" type="datetime-local" onChange={(e) => onSelectDatetimeHandler(e.target.value)} />
       <TrafficCameraSelect
         isFetchingCameras={isFetchingCameras}
         trafficCamerasList={trafficCamerasList}
-        onSelect={onSelectHandler}
+        onSelect={onSelectCameraHandler}
       />
       {selectedCamera && <TrafficImage selectedCamera={selectedCamera} />}
     </Box>
