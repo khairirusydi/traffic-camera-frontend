@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Box, Input, useToast } from '@chakra-ui/react';
+import { Box, Card, CardBody, Heading, Input, Stack, Text, useToast } from '@chakra-ui/react';
 
 import { useGetTrafficCameras } from '../../services/traffic';
+import { formatDateTimeForApi } from '../../utils.ts/dateUtil';
 import TrafficCameraSelect from './TrafficCameraSelect';
 import TrafficImage from './TrafficImage';
-import { formatDateTimeForApi } from '../../utils.ts/dateUtil';
 
 const TrafficCameras = () => {
   const [selectedDateTime, setSelectedDateTime] = useState<string | undefined>();
@@ -43,12 +43,31 @@ const TrafficCameras = () => {
 
   return (
     <Box py="4">
-      <Input placeholder="Select Date and Time" size="md" type="datetime-local" onChange={(e) => onSelectDatetimeHandler(e.target.value)} />
-      <TrafficCameraSelect
-        isFetchingCameras={isFetchingCameras}
-        trafficCamerasList={trafficCamerasList}
-        onSelect={onSelectCameraHandler}
-      />
+      <Card mb="4">
+        <CardBody>
+          <Stack spacing="3">
+            <Input
+              placeholder="Select Date and Time"
+              size="md"
+              type="datetime-local"
+              onChange={(e) => onSelectDatetimeHandler(e.target.value)}
+            />
+            <TrafficCameraSelect
+              isFetchingCameras={isFetchingCameras}
+              trafficCamerasList={trafficCamerasList}
+              onSelect={onSelectCameraHandler}
+            />
+          </Stack>
+        </CardBody>
+      </Card>
+      {selectedCamera && (
+        <Card mb="4">
+          <CardBody>
+            <Heading size="md">Weather Forecast</Heading>
+            <Text>{selectedCamera.forecast}</Text>
+          </CardBody>
+        </Card>
+      )}
       {selectedCamera && <TrafficImage selectedCamera={selectedCamera} />}
     </Box>
   );

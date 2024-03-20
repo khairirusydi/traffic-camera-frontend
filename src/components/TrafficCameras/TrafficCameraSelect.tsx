@@ -1,4 +1,5 @@
 import { Select, Skeleton } from '@chakra-ui/react';
+
 import { TrafficCamera } from '../../types/traffic';
 
 interface TrafficCameraSelectProps {
@@ -8,8 +9,8 @@ interface TrafficCameraSelectProps {
 }
 
 const TrafficCameraSelect = ({ isFetchingCameras, trafficCamerasList, onSelect }: TrafficCameraSelectProps) => (
-  <Skeleton isLoaded={!isFetchingCameras} my="4">
-    <Select placeholder="Select traffic camera" onChange={(e) => onSelect(e.target.value)}>
+  <Skeleton isLoaded={!isFetchingCameras}>
+    <Select placeholder="Select traffic camera" size="md" onChange={(e) => onSelect(e.target.value)}>
       {trafficCamerasList?.map((c) => (
         <option key={c.cameraId} value={c.cameraId}>
           {c.name}

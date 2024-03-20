@@ -7,12 +7,9 @@ interface TrafficImageProps {
 }
 
 const TrafficImage = ({ selectedCamera }: TrafficImageProps) => (
-  <Card maxW="sm">
+  <Card>
     <CardBody>
-      <Image
-        src={selectedCamera.image}
-        alt={selectedCamera.name}
-      />
+      <Image src={selectedCamera.image} alt={selectedCamera.name} />
       <Stack mt="6" spacing="3">
         <Heading size="md">{selectedCamera.name}</Heading>
       </Stack>
