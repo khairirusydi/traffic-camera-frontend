@@ -6,3 +6,10 @@ export const formatDateTimeForApi = (dateTime: string) => {
 
   return formatInTimeZone(date, 'Asia/Singapore', format);
 };
+
+export const formatDateTimeForDisplay = (dateTime: string) => {
+  const format = "dd MMM yyyy HH:mm:ss a";
+  const date = new Date(dateTime);
+
+  return formatInTimeZone(date, 'Asia/Singapore', format);
+};

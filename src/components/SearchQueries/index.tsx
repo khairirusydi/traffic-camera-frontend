@@ -1,6 +1,7 @@
 import { Card, CardBody, Heading, ListItem, UnorderedList } from '@chakra-ui/react';
 
 import { SearchQuery } from '../../types/searchQueries';
+import { formatDateTimeForDisplay } from '../../utils.ts/dateUtil';
 
 interface SearchQueriesProps {
   localSearches: SearchQuery[];
@@ -16,7 +17,7 @@ const SearchQueries = ({ localSearches, globalSearches }: SearchQueriesProps) =>
         </Heading>
         <UnorderedList>
           {localSearches.map((ls) => (
-            <ListItem key={ls.id}>{`${ls.selectedDate} - ${ls.cameraId}`}</ListItem>
+            <ListItem key={ls.id}>{`${formatDateTimeForDisplay(ls.selectedDate)} - ${ls.name}`}</ListItem>
           ))}
         </UnorderedList>
       </CardBody>
@@ -28,7 +29,7 @@ const SearchQueries = ({ localSearches, globalSearches }: SearchQueriesProps) =>
         </Heading>
         <UnorderedList>
           {globalSearches.map((ls) => (
-            <ListItem key={ls.id}>{`${ls.selectedDate} - ${ls.cameraId}`}</ListItem>
+            <ListItem key={ls.id}>{`${formatDateTimeForDisplay(ls.selectedDate)} - ${ls.name}`}</ListItem>
           ))}
         </UnorderedList>
       </CardBody>
