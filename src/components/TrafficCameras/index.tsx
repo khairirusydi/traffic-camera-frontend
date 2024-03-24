@@ -4,7 +4,7 @@ import { Card, CardBody, Grid, GridItem, Heading, Input, Text, useToast } from '
 import { useAddNewQuery, useGetRecentQueries } from '../../services/searchQueries';
 import { useGetTrafficCameras } from '../../services/traffic';
 import { SearchQuery } from '../../types/searchQueries';
-import { formatDateTimeForApi } from '../../utils.ts/dateUtil';
+import { formatAddNewQueryDateTime, formatDateTimeForApi } from '../../utils.ts/dateUtil';
 import SearchQueries from '../SearchQueries';
 import TrafficCameraSelect from './TrafficCameraSelect';
 import TrafficImage from './TrafficImage';
@@ -59,7 +59,7 @@ const TrafficCameras = () => {
     const [id, name] = identifier.split(',');
 
     await addNewQuery({
-      selectedDate: selectedDateTime || new Date().toISOString(),
+      selectedDate: selectedDateTime ? formatAddNewQueryDateTime(selectedDateTime) : new Date().toISOString(),
       cameraId: id,
       name,
     });
