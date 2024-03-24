@@ -19,7 +19,7 @@ const TrafficCameras = () => {
   const [selectedCameraId, setSelectedCameraId] = useState<string>('');
 
   const onAddedNewQuery = (data: SearchQuery) => {
-    const updatedLocal = recentSearches.concat(data);
+    const updatedLocal = [data, ...recentSearches];
     setRecentSearches(updatedLocal);
     localStorage.setItem(LOCAL_SEARCH_HISTORY_KEY, JSON.stringify(updatedLocal));
   };
@@ -30,8 +30,9 @@ const TrafficCameras = () => {
 
   const selectedCamera = useMemo(() => {
     if (!selectedCameraId) return undefined;
+    const selectedId = selectedCameraId.split(',')[0];
 
-    return trafficCamerasList?.find((camera) => camera.cameraId === selectedCameraId);
+    return trafficCamerasList?.find((camera) => camera.cameraId === selectedId);
   }, [selectedCameraId, trafficCamerasList]);
 
   useEffect(() => {
@@ -54,8 +55,8 @@ const TrafficCameras = () => {
   if (isError) return null;
 
   const onSelectCameraHandler = async (identifier: string) => {
+    setSelectedCameraId(identifier);
     const [id, name] = identifier.split(',');
-    setSelectedCameraId(id);
 
     await addNewQuery({
       selectedDate: selectedDateTime || new Date().toISOString(),
