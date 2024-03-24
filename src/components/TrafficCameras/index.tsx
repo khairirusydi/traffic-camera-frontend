@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Card, CardBody, Grid, GridItem, Heading, Input, Text, useToast } from '@chakra-ui/react';
 
+import useGetRecentSearches from '../../hooks/useGetRecentSearches';
 import { useGetTrafficCameras } from '../../services/traffic';
 import { formatDateTimeForApi } from '../../utils.ts/dateUtil';
 import TrafficCameraSelect from './TrafficCameraSelect';
@@ -11,6 +12,7 @@ const TrafficCameras = () => {
   const [selectedCameraId, setSelectedCameraId] = useState<string>('');
 
   const toast = useToast();
+  const { handleAddNewQuery } = useGetRecentSearches();
   const { data: trafficCamerasList, isError, isLoading: isFetchingCameras } = useGetTrafficCameras(selectedDateTime);
 
   const selectedCamera = useMemo(() => {
@@ -33,6 +35,10 @@ const TrafficCameras = () => {
 
   const onSelectCameraHandler = (id: string) => {
     setSelectedCameraId(id);
+    handleAddNewQuery({
+      selectedDate: selectedDateTime || new Date().toISOString(),
+      cameraId: id,
+    });
   };
 
   const onSelectDatetimeHandler = (datetime: string) => {
