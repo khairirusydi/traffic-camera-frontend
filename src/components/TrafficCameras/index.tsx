@@ -54,6 +54,7 @@ const TrafficCameras = () => {
               size="md"
               type="datetime-local"
               onChange={(e) => onSelectDatetimeHandler(e.target.value)}
+              value={selectedDateTime}
             />
           </CardBody>
         </Card>
@@ -63,6 +64,7 @@ const TrafficCameras = () => {
           isFetchingCameras={isFetchingCameras}
           trafficCamerasList={trafficCamerasList}
           onSelect={onSelectCameraHandler}
+          selectedCameraId={selectedCameraId}
         />
       </GridItem>
       {selectedCamera && (
