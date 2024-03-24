@@ -28,7 +28,7 @@ const TrafficCameraSelect = ({
           value={selectedCameraId}
         >
           {trafficCamerasList?.map((c) => (
-            <option key={c.cameraId} value={c.cameraId}>
+            <option key={c.cameraId} value={c.cameraId.concat(',', c.name)}>
               {c.name}
             </option>
           ))}

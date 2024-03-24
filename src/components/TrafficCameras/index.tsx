@@ -53,12 +53,14 @@ const TrafficCameras = () => {
 
   if (isError) return null;
 
-  const onSelectCameraHandler = async (id: string) => {
+  const onSelectCameraHandler = async (identifier: string) => {
+    const [id, name] = identifier.split(',');
     setSelectedCameraId(id);
 
     await addNewQuery({
       selectedDate: selectedDateTime || new Date().toISOString(),
       cameraId: id,
+      name,
     });
   };
 
