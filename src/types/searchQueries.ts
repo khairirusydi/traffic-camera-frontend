@@ -9,3 +9,7 @@ export interface AddNewQueryRequest {
   selectedDate: string;
   cameraId: string;
 }
+
+export interface GetRecentQueriesResponse {
+  queries: SearchQuery[];
+}

@@ -1,18 +1,31 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Card, CardBody, Grid, GridItem, Heading, Input, Text, useToast } from '@chakra-ui/react';
 
-import useGetRecentSearches from '../../hooks/useGetRecentSearches';
+import { useAddNewQuery, useGetRecentQueries } from '../../services/searchQueries';
 import { useGetTrafficCameras } from '../../services/traffic';
+import { SearchQuery } from '../../types/searchQueries';
 import { formatDateTimeForApi } from '../../utils.ts/dateUtil';
+import SearchQueries from '../SearchQueries';
 import TrafficCameraSelect from './TrafficCameraSelect';
 import TrafficImage from './TrafficImage';
 
+const LOCAL_SEARCH_HISTORY_KEY = 'LOCAL_SEARCH_HISTORY_KEY' as const;
+
 const TrafficCameras = () => {
+  const toast = useToast();
+
+  const [recentSearches, setRecentSearches] = useState<SearchQuery[]>([]);
   const [selectedDateTime, setSelectedDateTime] = useState<string | undefined>();
   const [selectedCameraId, setSelectedCameraId] = useState<string>('');
 
-  const toast = useToast();
-  const { handleAddNewQuery } = useGetRecentSearches();
+  const onAddedNewQuery = (data: SearchQuery) => {
+    const updatedLocal = recentSearches.concat(data);
+    setRecentSearches(updatedLocal);
+    localStorage.setItem(LOCAL_SEARCH_HISTORY_KEY, JSON.stringify(updatedLocal));
+  };
+
+  const { mutateAsync: addNewQuery } = useAddNewQuery(onAddedNewQuery);
+  const { data: globalSearches } = useGetRecentQueries();
   const { data: trafficCamerasList, isError, isLoading: isFetchingCameras } = useGetTrafficCameras(selectedDateTime);
 
   const selectedCamera = useMemo(() => {
@@ -20,6 +33,13 @@ const TrafficCameras = () => {
 
     return trafficCamerasList?.find((camera) => camera.cameraId === selectedCameraId);
   }, [selectedCameraId, trafficCamerasList]);
+
+  useEffect(() => {
+    const localSearches = localStorage.getItem(LOCAL_SEARCH_HISTORY_KEY);
+    if (localSearches) {
+      setRecentSearches(JSON.parse(localSearches));
+    }
+  }, []);
 
   useEffect(() => {
     if (isError) {
@@ -33,9 +53,10 @@ const TrafficCameras = () => {
 
   if (isError) return null;
 
-  const onSelectCameraHandler = (id: string) => {
+  const onSelectCameraHandler = async (id: string) => {
     setSelectedCameraId(id);
-    handleAddNewQuery({
+
+    await addNewQuery({
       selectedDate: selectedDateTime || new Date().toISOString(),
       cameraId: id,
     });
@@ -46,6 +67,8 @@ const TrafficCameras = () => {
 
     setSelectedDateTime(formattedDateTime);
   };
+
+  const hasRecentQueries = recentSearches.length > 0 || (globalSearches && globalSearches.length > 0);
 
   return (
     <Grid py="4" gap="4" templateColumns="repeat(3, 1fr)">
@@ -73,6 +96,16 @@ const TrafficCameras = () => {
           selectedCameraId={selectedCameraId}
         />
       </GridItem>
+      {hasRecentQueries && (
+        <GridItem colSpan={{ base: 3, md: 2 }}>
+          <SearchQueries localSearches={recentSearches} globalSearches={globalSearches || []} />
+        </GridItem>
+      )}
+      {selectedCamera && (
+        <GridItem colSpan={{ base: 3, md: 2 }}>
+          <TrafficImage selectedCamera={selectedCamera} />
+        </GridItem>
+      )}
       {selectedCamera && (
         <GridItem colSpan={{ base: 3, md: 1 }}>
           <Card>
@@ -83,11 +116,6 @@ const TrafficCameras = () => {
               <Text>{selectedCamera.forecast}</Text>
             </CardBody>
           </Card>
-        </GridItem>
-      )}
-      {selectedCamera && (
-        <GridItem colSpan={{ base: 3, md: 2 }}>
-          <TrafficImage selectedCamera={selectedCamera} />
         </GridItem>
       )}
     </Grid>
