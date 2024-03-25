@@ -1,30 +1,33 @@
-# React + TypeScript + Vite
+# Traffic Camera Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![App screenshot](/docs/app-screenshot.png)
 
-Currently, two official plugins are available:
+## Description
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Frontend app utilising [open source data from Data.gov](https://guide.data.gov.sg/developer-guide/api-overview) to display traffic camera and weather forecast data.
 
-## Expanding the ESLint configuration
+## Prerequisites
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+In order the make run the project locally, please ensure that:
 
-- Configure the top-level `parserOptions` property like this:
+- `node` is installed on your machine
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+## Installation
+
+```bash
+$ npm install
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## Running the app
+
+```bash
+# watch mode in development
+$ npm run dev
+```
+
+The app can be accessed at [http://localhost:5173](http://localhost:5173).
+
+## Possible Enhancements
+- Set limit on recent search saved to localStorage
+  - Currently the app will keep adding every new search query without a maximum limit to the count
+- Add more tests with mocking the useQuery values
